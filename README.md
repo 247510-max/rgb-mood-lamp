@@ -1,2 +1,2 @@
 # rgb-mood-lamp
-FRGA RGB Mood lamp (VHDL, Nexys A7)
+FPGA RGB Mood lamp (VHDL, Nexys A7)
