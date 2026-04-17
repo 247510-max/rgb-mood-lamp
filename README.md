@@ -67,3 +67,27 @@ Popis vstupů a výstupů:
 #### Testbench
 
 ![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/pwm_tb.png)
+
+### rgb_mood_lamp_top
+Top level modul, který sjednocuje všichny moduly dohromady.  
+Popis vstupů a výstupů:  
+|**Název portu**|**Směr**|**Typ**|**Popis**|
+|:-:|:-:|:--|:--|
+|clk|in|std_logic|Hodinový signál 100 MHz|
+|btnc|in|std_logic|Centrální tlačítko|
+|btnu|in|std_logic|Horní tlačítko|
+|btnd|in|std_logic|Dolní tlačítko|
+|btnl|in|std_logic|Levé tlačítko|
+|btnr|in|std_logic|Pravé tlačítko|
+|led16_r|out|std_logic|Červená složka RGB LED|
+|led16_g|out|std_logic|Zelená složka RGB LED|
+|led16_b|out|std_logic|Modrá složka RGB LED|  
+
+Popis signálů:  
+|**Název signálu**|**Typ**|**Popis**|
+|:-:|:--|:--|
+|sig_btns|std_logic_vector (3 downto 0)|Vektor hodnot tlačítek|
+|sig_params|std_logic_vector (7 downto 0)|Vektor hodnot parametrů|
+|sig_led_r|std_logic_vector (7 downto 0)|Jas červené složky RGB|
+|sig_led_g|std_logic_vector (7 downto 0)|Jas zelené složky RGB|
+|sig_led_b|std_logic_vector (7 downto 0)|Jas modré složky RGB|
