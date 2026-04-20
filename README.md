@@ -39,7 +39,12 @@ Popis vstupů a výstupů:
 |clk|in|std_logic|Hodinový signál 100 MHz|
 |rst|in|std_logic|Reset|
 |btns|in|std_logic_vector (3 downto 0)|Vektor hodnot tlačítek|
-|params|out|std_logic_vector (7 downto 0)|Vektor parametrů: (7 downto 4) - parametr jasu; (3 downto 0) - parametr rychlosti|
+|params|out|std_logic_vector (7 downto 0)|Vektor parametrů: (7 downto 4) - parametr jasu; (3 downto 0) - parametr rychlosti|  
+
+#### Testbench
+
+![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/main_tb.png)
+
 ### rgb
 Přijímá parametry rychlostí a jasu RGB z modulu main. Na základě těchto paramtrů řídí celý proces přepínání barev LED.  
 Má 6 stavů, které kombinují zvětšení a snížení jasu jednotlivých složek RGB.  
