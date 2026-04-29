@@ -12,7 +12,7 @@ Celkem je 16 úrovní rychlosti a 16 úrovní jasu. Rychlost lze nastavovat pomo
 ![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/top_level_architecture.png)
 
 ## Popis modulů
-### debounce_top
+### [debounce_top.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/debounce/debounce.srcs/sources_1/new/debounce_top.vhd)  
 Přijímá signály tlačítek, vytváří z nich 4bitový vektor a posílá ho na vstup BTNS modulu main.  
 Vstupy jsou jednotlivá tlačítka BTNU, BTND, BTNL, BTNR, clock a reset.  
 Popis vstupů a výstupů:  
@@ -29,7 +29,7 @@ Popis vstupů a výstupů:
 
 ![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/debounce_top_tb.png)
 
-### main
+### [main.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/main/main.srcs/sources_1/new/main.vhd)  
 Kontroluje nastavení rychlostí přepínání a jasu RGB LED  
 Vstupy jsou clock, reset, 4bitový vektor BTNS (vektor hodnot tlačítek).  
 Výstupem je 8bitový vektor PARAMS (první 4 bity je parametr jasu, druhé 4 bity je parametr rychlostí).  
@@ -45,7 +45,7 @@ Popis vstupů a výstupů:
 
 ![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/main_tb.png)
 
-### rgb
+### [rgb.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/rgb/rgb.srcs/sources_1/new/rgb.vhd)  
 Přijímá parametry rychlostí a jasu RGB z modulu main. Na základě těchto paramtrů řídí celý proces přepínání barev LED.  
 Má 6 stavů, které kombinují zvětšení a snížení jasu jednotlivých složek RGB.  
 Vstupy jsou CLK, RST a 8bitových vektor PARAMS.  
@@ -59,7 +59,7 @@ Popis vstupů a výstupů:
 |led_r|out|std_logic_vektor (7 downto 0)|Vektor jasu červené složky|
 |led_g|out|std_logic_vektor (7 downto 0)|Vektor jasu zelené složky|
 |led_b|out|std_logic_vektor (7 downto 0)|Vektor jasu modré složky|
-### pwm
+### [pwm.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/pwm/pwm.srcs/sources_1/new/pwm.vhd)  
 PWM modulace 8bitového signálu ze vstupu LED_IN.
 Používá komponentu clk_en s parametrem G_MAX = 400, což pro 8bitový převodník odpovídá kmitočtu PWM přibližně 1 kHz.  
 Popis vstupů a výstupů:  
@@ -73,7 +73,7 @@ Popis vstupů a výstupů:
 
 ![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/pwm_tb.png)
 
-### rgb_mood_lamp_top
+### [rgb_mood_lamp_top.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/new/rgb_mood_lamp_top.vhd)  
 Top level modul, který sjednocuje všichny moduly dohromady.  
 Popis vstupů a výstupů:  
 |**Název portu**|**Směr**|**Typ**|**Popis**|
