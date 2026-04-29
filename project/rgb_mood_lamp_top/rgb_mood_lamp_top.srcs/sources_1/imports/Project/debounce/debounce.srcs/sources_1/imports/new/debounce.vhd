@@ -1,35 +1,26 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/19/2026 01:04:06 PM
--- Design Name: 
--- Module Name: debounce - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-------------------------------------------------
+--! @brief Button debouncer
+--! @version 1.1
+--! @copyright (c) 2023-2026 Tomas Fryza, MIT license
+--!
+--! This design implements a debouncer for mechanical
+--! push-buttons using a sampling technique with a
+--! shift register. The circuit provides a stable 
+--! debounced output and generates a one-clock-cycle
+--! pulse when a button press is detected.
+--
+-- Notes:
+-- - Synchronous design (rising edge of clk)
+-- - High-active synchronous reset
+-- - Input synchronization using two flip-flops
+-- - Debouncing via shift register and sampling
+-- - Configurable debounce time via clock enable
+-- - One-clock pulse output for button press
+-------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity debounce is
     Port ( clk : in STD_LOGIC;

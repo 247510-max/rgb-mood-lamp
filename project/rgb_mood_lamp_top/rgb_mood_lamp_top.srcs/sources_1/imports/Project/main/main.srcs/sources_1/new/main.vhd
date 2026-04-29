@@ -1,75 +1,66 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04/15/2026 10:54:02 PM
--- Design Name: 
+-- Company: Brno University of Technology
+-- Engineer: Danat Pustynnikov, Alisher Aitken
+-- Design Name: main.vhd
 -- Module Name: main - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Project Name: RGB Mood Lamp
+-- Target Devices: XILINS Nexys ARTIX-7 50T
+--
+--
+-- Copyright (c) 2026 Alisher Aitken, Danat Pustynnikov
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+-- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+-- and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
+ENTITY main IS
+	PORT (
+		clk : IN STD_LOGIC;
+		rst : IN STD_LOGIC;
+		btns : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- tlacitka: [3]=leve tlacitko, [2]=prave tlacitko, [1]=horni tlacitko, [0]=dolni tlacitko
+		params : OUT STD_LOGIC_VECTOR(7 DOWNTO 0) -- parametry: [7:4]=jas, [3:0]=rychlost
+	);
+END main;
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+ARCHITECTURE Behavioral OF main IS
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+	SIGNAL brightness : unsigned(3 DOWNTO 0) := "1000"; -- vychozi hodnota jasu
+	SIGNAL speed : unsigned(3 DOWNTO 0) := "1000";  -- vychozi hodnota rychlosti prelevani
+BEGIN
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+	PROCESS (clk)
+	BEGIN
+		IF rising_edge(clk) THEN
+			IF rst = '1' THEN
+				brightness <= "1000";
+				speed <= "1000";
+			ELSE
+				IF btns(1) = '1' THEN -- zvysit jas
+					brightness <= brightness + 1;
 
-entity main is
-    Port ( 
-        clk    : in  STD_LOGIC;
-        rst    : in  STD_LOGIC;
-        btns   : in  STD_LOGIC_VECTOR(3 downto 0);  -- [3]=Left, [2]=Right, [1]=Up, [0]=Down
-        params : out STD_LOGIC_VECTOR(7 downto 0)   -- [7:4] Brightness, [3:0] Speed
-    );
-end main;
+				ELSIF btns(0) = '1' THEN -- snizit jas
+					brightness <= brightness - 1;
 
-architecture Behavioral of main is
+				ELSIF btns(3) = '1' THEN -- zpomalit
+					speed <= speed - 1;
 
-    signal brightness : unsigned(3 downto 0) := "1000";
-    signal speed      : unsigned(3 downto 0) := "1000";
-begin
+				ELSIF btns(2) = '1' THEN -- zrychlit
+					speed <= speed + 1;
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
 
-    process(clk)
-    begin
-        if rising_edge(clk) then
-            if rst = '1' then
-                brightness <= "1000";
-                speed      <= "1000";
-            else
-                if btns(1) = '1' then          -- UP
-                    brightness <= brightness + 1;
+	params <= STD_LOGIC_VECTOR(brightness) & STD_LOGIC_VECTOR(speed); --vystupni vektor parametru
 
-                elsif btns(0) = '1' then       -- DOWN
-                    brightness <= brightness - 1;
-
-                elsif btns(3) = '1' then       -- LEFT
-                    speed <= speed - 1;
-
-                elsif btns(2) = '1' then       -- RIGHT
-                    speed <= speed + 1;
-                end if;
-            end if;
-        end if;
-    end process;
-
-    params <= std_logic_vector(brightness) & std_logic_vector(speed);
-
-end Behavioral;
+END Behavioral;

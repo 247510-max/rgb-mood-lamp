@@ -1,35 +1,21 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/05/2026 01:26:22 PM
--- Design Name: 
--- Module Name: clk_en - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-------------------------------------------------
+--! @brief Clock enable generator (single-cycle pulse)
+--! @version 1.4
+--! @copyright (c) 2019-2026 Tomas Fryza, MIT license
+--!
+--! This design generates a single-clock-cycle enable
+--! pulse every G_MAX clock cycles.
+--
+-- Notes:
+-- - Synchronous design (rising edge of clk)
+-- - High-active synchronous reset
+-- - Output pulse width = one clock period
+-- - G_MAX must be greater than 0
+-------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity clk_en is
     generic (

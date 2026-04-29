@@ -1,81 +1,79 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04/09/2026 04:21:52 PM
--- Design Name: 
+-- Company: Brno University of Technology
+-- Engineer: Danat Pustynnikov, Alisher Aitken
+-- Design Name: pwm.vhd
 -- Module Name: pwm - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Project Name: RGB Mood Lamp
+-- Target Devices: XILINS Nexys ARTIX-7 50T
+--
+--
+-- Copyright (c) 2026 Alisher Aitken, Danat Pustynnikov
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+-- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+-- and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
+ENTITY pwm IS
+	PORT
+	(
+		clk : IN STD_LOGIC;
+		rst : IN STD_LOGIC;
+		led_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0); -- vstupni vektor jasu
+		led_out : OUT STD_LOGIC); -- vystupni PWM signal
+END pwm;
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+ARCHITECTURE Behavioral OF pwm IS
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+	SIGNAL ce_sample : STD_LOGIC; -- signal clk_en
+	SIGNAL counter : unsigned (7 DOWNTO 0) := (OTHERS => '0'); -- citac
+	COMPONENT clk_en IS
+		GENERIC
+			(G_MAX : POSITIVE);
+		PORT
+		(
+			clk : IN STD_LOGIC;
+			rst : IN STD_LOGIC;
+			ce : OUT STD_LOGIC
+		);
+	END COMPONENT clk_en;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+BEGIN
 
-entity pwm is
-    Port ( clk : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           led_in : in STD_LOGIC_VECTOR (7 downto 0);
-           led_out : out STD_LOGIC);
-end pwm;
+	clock_0 : clk_en
+	GENERIC
+	MAP(G_MAX => 400) -- hodnota G_MAX pro 8bitovy prevodnik, odpovida kmitoctu PWM prevodniku priblizne 1 kHz
+	PORT MAP
+	(
+		clk => clk,
+		rst => rst,
+		ce => ce_sample
+	);
 
-architecture Behavioral of pwm is
+	PROCESS (clk, rst)
+	BEGIN
+		IF rst = '1' THEN
+			counter <= (OTHERS => '0');
+			led_out <= '0';
+		ELSIF rising_edge (clk) THEN
+			IF ce_sample = '1' THEN
+				counter <= counter + 1;
+				IF counter < unsigned(led_in) THEN  -- hodnota vystupu prevodniku v periode bude HIGH dokud citac nenarazi na prevadenou hodnou, pak bude v LOW
+					led_out <= '1';
+				ELSE
+					led_out <= '0';
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
 
-    signal ce_sample: STD_LOGIC;
-    signal counter : unsigned (7 downto 0) := (others => '0');
-    component clk_en is
-    generic ( G_MAX : positive );
-    port (
-        clk : in  std_logic;
-        rst : in  std_logic;
-        ce  : out std_logic
-    );
-    end component clk_en;
-
-begin
-
-    clock_0 : clk_en
-        generic map (G_MAX => 400)
-        port map(
-            clk => clk,
-            rst => rst,
-            ce => ce_sample
-        );
-        
-    process(clk, rst)
-    begin
-        if rst = '1' then
-            counter <= (others => '0');
-            led_out <= '0';
-        elsif rising_edge (clk) then
-            if ce_sample = '1' then
-                counter <= counter + 1;
-                if counter < unsigned(led_in) then
-                    led_out <= '1';
-                else led_out <= '0';
-                end if;
-            end if;
-        end if;
-    end process;
-
-end Behavioral;
+END Behavioral;

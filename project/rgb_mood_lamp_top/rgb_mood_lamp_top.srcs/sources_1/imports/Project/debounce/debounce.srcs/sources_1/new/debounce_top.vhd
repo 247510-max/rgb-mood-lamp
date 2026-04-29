@@ -1,121 +1,112 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04/09/2026 05:52:40 PM
--- Design Name: 
+-- Company: Brno University of Technology
+-- Engineer: Danat Pustynnikov, Alisher Aitken
+-- Design Name: debounce_top.vhd
 -- Module Name: debounce_top - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Project Name: RGB Mood Lamp
+-- Target Devices: XILINS Nexys ARTIX-7 50T
+--
+--
+-- Copyright (c) 2026 Alisher Aitken, Danat Pustynnikov
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+-- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+-- and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
+ENTITY debounce_top IS
+	PORT (
+		btnu_in : IN STD_LOGIC;
+		btnd_in : IN STD_LOGIC;
+		btnl_in : IN STD_LOGIC;
+		btnr_in : IN STD_LOGIC;
+		rst : IN STD_LOGIC;
+		clk : IN STD_LOGIC;
+		btns : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
+END debounce_top;
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+ARCHITECTURE Behavioral OF debounce_top IS
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+	COMPONENT debounce IS
+		PORT (
+			clk : IN STD_LOGIC;
+			rst : IN STD_LOGIC;
+			btn_in : IN STD_LOGIC;
+			btn_state : OUT STD_LOGIC;
+			btn_press : OUT STD_LOGIC
+		);
+	END COMPONENT debounce;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+	SIGNAL btnl_press, btnr_press, btnu_press, btnd_press : STD_LOGIC;  --signaly hodnot tlacitek
+	SIGNAL btns_int : STD_LOGIC_VECTOR(3 DOWNTO 0);  --vystupni vektor hodnot tlacitek
 
-entity debounce_top is
-    Port ( btnu_in : in STD_LOGIC;
-           btnd_in : in STD_LOGIC;
-           btnl_in : in STD_LOGIC;
-           btnr_in : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           clk : in STD_LOGIC;
-           btns : out STD_LOGIC_VECTOR (3 downto 0));
-end debounce_top;
+BEGIN
 
-architecture Behavioral of debounce_top is
+	db_l : debounce
+	PORT MAP(
+		clk => clk,
+		rst => rst,
+		btn_in => btnl_in,
+		btn_state => OPEN,
+		btn_press => btnl_press
+	);
 
-    component debounce is
-        Port (
-           clk : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           btn_in : in STD_LOGIC;
-           btn_state : out STD_LOGIC;
-           btn_press : out STD_LOGIC
-        );
-    end component debounce;
-    
-    signal btnl_state, btnr_state, btnu_state, btnd_state : std_logic;
-    signal btnl_press, btnr_press, btnu_press, btnd_press : std_logic;
-    signal btns_int : std_logic_vector(3 downto 0);
+	db_r : debounce
+	PORT MAP(
+		clk => clk,
+		rst => rst,
+		btn_in => btnr_in,
+		btn_state => OPEN,
+		btn_press => btnr_press
+	);
 
-begin
+	db_u : debounce
+	PORT MAP(
+		clk => clk,
+		rst => rst,
+		btn_in => btnu_in,
+		btn_state => OPEN,
+		btn_press => btnu_press
+	);
 
-    db_l : debounce
-        port map(
-            clk => clk,
-            rst => rst,
-            btn_in => btnl_in,
-            btn_state => open,
-            btn_press => btnl_press
-        );
-        
-    db_r : debounce
-        port map(
-            clk => clk,
-            rst => rst,
-            btn_in => btnr_in,
-            btn_state => open,
-            btn_press => btnr_press
-        );
-        
-    db_u : debounce
-        port map(
-            clk => clk,
-            rst => rst,
-            btn_in => btnu_in,
-            btn_state => open,
-            btn_press => btnu_press
-        );
+	db_d : debounce
+	PORT MAP(
+		clk => clk,
+		rst => rst,
+		btn_in => btnd_in,
+		btn_state => OPEN,
+		btn_press => btnd_press
+	);
 
-    db_d : debounce
-        port map(
-            clk => clk,
-            rst => rst,
-            btn_in => btnd_in,
-            btn_state => open,
-            btn_press => btnd_press
-        );
+	p_debounce : PROCESS (clk)
+	BEGIN
+		IF rising_edge(clk) THEN
+			IF rst = '1' THEN
+				btns_int <= (OTHERS => '0');
+			ELSE
+				IF btnl_press = '1' THEN
+					btns_int <= "1000";
+				ELSIF btnr_press = '1' THEN
+					btns_int <= "0100";
+				ELSIF btnu_press = '1' THEN
+					btns_int <= "0010";
+				ELSIF btnd_press = '1' THEN
+					btns_int <= "0001";
+				ELSE
+					btns_int <= (OTHERS => '0');
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
 
-    p_debounce : process(clk)
-    begin
-        if rising_edge(clk) then
-            if rst = '1' then
-                btns_int <= (others => '0');
-            else
-                if    btnl_press = '1' then
-                    btns_int <= "1000";
-                elsif btnr_press = '1' then
-                    btns_int <= "0100";
-                elsif btnu_press = '1' then
-                    btns_int <= "0010";
-                elsif btnd_press = '1' then
-                    btns_int <= "0001";
-                else
-                    btns_int <= (others => '0');
-                end if;
-            end if;
-        end if;
-    end process;
+	btns <= btns_int;
 
-    btns <= btns_int;
-
-end Behavioral;
+END Behavioral;
