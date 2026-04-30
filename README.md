@@ -58,7 +58,10 @@ Popis vstupů a výstupů:
 |params|in|std_logic_vector (7 downto 0)|Vektor parametrů|
 |led_r|out|std_logic_vektor (7 downto 0)|Vektor jasu červené složky|
 |led_g|out|std_logic_vektor (7 downto 0)|Vektor jasu zelené složky|
-|led_b|out|std_logic_vektor (7 downto 0)|Vektor jasu modré složky|
+|led_b|out|std_logic_vektor (7 downto 0)|Vektor jasu modré složky|  
+#### Testbench  
+![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/testbenches/rgb_tb.png)
+
 ### [pwm.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/pwm/pwm.srcs/sources_1/new/pwm.vhd)  
 PWM modulace 8bitového signálu ze vstupu LED_IN.
 Používá komponentu clk_en s parametrem G_MAX = 400, což pro 8bitový převodník odpovídá kmitočtu PWM přibližně 1 kHz.  
