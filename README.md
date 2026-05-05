@@ -3,6 +3,9 @@ FPGA RGB Mood lamp (VHDL, Nexys A7).
 Cílem projektu je vytvořit RGB Mood lamp na desce Nexys A7 a jazyce VHDL. Projekt používá RGB LED na desce, která přepíná svoje barvy s nastavitelnou rychlostí a jasem.  
 Celkem je 16 úrovní rychlosti a 16 úrovní jasu. Rychlost lze nastavovat pomocí tlačítek BTNR (zrychlit o jednu úroveň) a BTNL (zpomalit o jednu úroveň). Jas se nastavuje tlačítky BTNU (zvětšit jas o jednu úroveň) a BTND (snížit jas o jednu úroveň).
 
+Odkaz na video na YouTube
+https://youtu.be/yJbyl8dC3Hs
+
 ## Členové týmu
 -Danat Pustynnikov (zodpovědný za vedení gitu, moduly rgb_mood_lamp_top, debounce, main)  
 -Alisher Aitken (zodpovědný za poster, moduly rgb a pwm)
