@@ -3,7 +3,7 @@ FPGA RGB Mood lamp (VHDL, Nexys A7).
 Cílem projektu je vytvořit RGB Mood lamp na desce Nexys A7 a jazyce VHDL. Projekt používá RGB LED na desce, která přepíná svoje barvy s nastavitelnou rychlostí a jasem.  
 Celkem je 16 úrovní rychlosti a 16 úrovní jasu. Rychlost lze nastavovat pomocí tlačítek BTNR (zrychlit o jednu úroveň) a BTNL (zpomalit o jednu úroveň). Jas se nastavuje tlačítky BTNU (zvětšit jas o jednu úroveň) a BTND (snížit jas o jednu úroveň).
 
-Odkaz na video na YouTube
+Odkaz na video na YouTube  
 https://youtu.be/yJbyl8dC3Hs
 
 ## Členové týmu
@@ -12,7 +12,7 @@ https://youtu.be/yJbyl8dC3Hs
 
 ## Architektura top levelu
 
-![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/top_level_architecture.png)
+![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/top_level_architecture_1.png)
 
 ## Popis modulů
 ### [debounce_top.vhd](https://github.com/247510-max/rgb-mood-lamp/blob/main/project/rgb_mood_lamp_top/rgb_mood_lamp_top.srcs/sources_1/imports/Project/debounce/debounce.srcs/sources_1/new/debounce_top.vhd)  
@@ -101,4 +101,13 @@ Popis signálů:
 |sig_params|std_logic_vector (7 downto 0)|Vektor hodnot parametrů|
 |sig_led_r|std_logic_vector (7 downto 0)|Jas červené složky RGB|
 |sig_led_g|std_logic_vector (7 downto 0)|Jas zelené složky RGB|
-|sig_led_b|std_logic_vector (7 downto 0)|Jas modré složky RGB|
+|sig_led_b|std_logic_vector (7 downto 0)|Jas modré složky RGB|  
+
+## Plakát
+![Image alt](https://github.com/247510-max/rgb-mood-lamp/blob/main/images/poster.png)
+  
+## Použité zdroje a nástroje  
+* AMD Vivado™ Design Suite 2025.2.1  
+* Google Gemini  
+* [Tomas Fryza's Github](https://github.com/tomas-fryza/vhdl-examples)  
+* The FPGA Prototyping by VHDL Examples, Second Edition by Pong P. Chu, 2008
